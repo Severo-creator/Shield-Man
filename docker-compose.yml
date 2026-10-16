@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: shieldman
+      POSTGRES_USER: ${DB_USER:-shieldman}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-senha_local_de_desenvolvimento}
+    ports:
+      - "5432:5432"
+    volumes:
+      - shieldman-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  api:
+    image: maven:3.9-eclipse-temurin-21
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - maven-cache:/root/.m2
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/shieldman
+      DB_USER: ${DB_USER:-shieldman}
+      DB_PASSWORD: ${DB_PASSWORD:-senha_local_de_desenvolvimento}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    command: mvn -B quarkus:dev -Dquarkus.http.host=0.0.0.0
+
+  java-build:
+    image: maven:3.9-eclipse-temurin-21
+    profiles: ["tools"]
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - maven-cache:/root/.m2
+    command: mvn clean package
+
+volumes:
+  shieldman-db:
+  maven-cache:
