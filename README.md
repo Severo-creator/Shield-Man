@@ -1,3 +1,6 @@
+# VIDEO
+https://youtu.be/T63QQwjR2Ro
+
 # ShieldMan
 
 Primeiras classes do projeto, em Java 21. O modelo representa as três áreas das telas descritas nos PDFs.
