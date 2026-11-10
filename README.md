@@ -1,5 +1,7 @@
 # VIDEO
-https://youtu.be/T63QQwjR2Ro
+S0: https://youtu.be/pYMCCR2AIIo
+
+S1: https://youtu.be/T63QQwjR2Ro
 
 # ShieldMan
 
